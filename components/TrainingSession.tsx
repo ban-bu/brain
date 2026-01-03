@@ -18,9 +18,11 @@ const TrainingSession: React.FC<TrainingSessionProps> = ({ game, onExit }) => {
   const [hasStarted, setHasStarted] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [finalScore, setFinalScore] = useState(0);
+  const [gameStats, setGameStats] = useState<any>(null);
 
-  const handleComplete = (score: number) => {
+  const handleComplete = (score: number, data?: any) => {
     setFinalScore(score);
+    setGameStats(data);
     setIsFinished(true);
   };
 
@@ -147,6 +149,27 @@ const TrainingSession: React.FC<TrainingSessionProps> = ({ game, onExit }) => {
             <span className="text-sm text-slate-400 uppercase tracking-wider font-bold">最终得分</span>
             <div className="text-4xl md:text-5xl font-black text-slate-900 mt-2">{finalScore}</div>
           </div>
+
+          {/* 斯特鲁普效应详细统计 */}
+          {game.id === GameType.STROOP && gameStats && (
+            <div className="bg-slate-50 rounded-2xl p-6 mb-8 space-y-4">
+              <h3 className="text-lg font-bold text-slate-800 mb-4">详细统计</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-green-600">{gameStats.correct}</div>
+                  <div className="text-sm text-slate-500">正确题数</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-red-600">{gameStats.wrong}</div>
+                  <div className="text-sm text-slate-500">错误题数</div>
+                </div>
+                <div className="text-center col-span-2">
+                  <div className="text-3xl font-bold text-blue-600">{gameStats.accuracy}%</div>
+                  <div className="text-sm text-slate-500">正确率</div>
+                </div>
+              </div>
+            </div>
+          )}
 
           <button 
             onClick={onExit}

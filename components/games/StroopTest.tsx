@@ -18,6 +18,8 @@ const StroopTest: React.FC<GameSessionProps> = ({ onComplete }) => {
   const [currentColor, setCurrentColor] = useState(COLORS[1]);
   const [options, setOptions] = useState<typeof COLORS>([]);
   const [gameFinished, setGameFinished] = useState(false);
+  const [correctCount, setCorrectCount] = useState(0);
+  const [wrongCount, setWrongCount] = useState(0);
 
   const generateTurn = useCallback(() => {
     const wordIdx = Math.floor(Math.random() * COLORS.length);
@@ -53,18 +55,27 @@ const StroopTest: React.FC<GameSessionProps> = ({ onComplete }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // 当游戏结束时调用 onComplete，传递最终分数
+  // 当游戏结束时调用 onComplete，传递最终分数和统计数据
   useEffect(() => {
     if (gameFinished) {
-      onComplete(score);
+      const totalAttempts = correctCount + wrongCount;
+      const accuracy = totalAttempts > 0 ? Math.round((correctCount / totalAttempts) * 100) : 0;
+      onComplete(score, {
+        correct: correctCount,
+        wrong: wrongCount,
+        totalAttempts,
+        accuracy
+      });
     }
-  }, [gameFinished, score, onComplete]);
+  }, [gameFinished, score, correctCount, wrongCount, onComplete]);
 
   const handleOptionClick = (selectedColorName: string) => {
     if (selectedColorName === currentColor.name) {
       setScore(s => s + 10);
+      setCorrectCount(c => c + 1);
     } else {
       setScore(s => Math.max(0, s - 5));
+      setWrongCount(c => c + 1);
     }
     generateTurn();
   };
