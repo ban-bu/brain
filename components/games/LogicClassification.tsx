@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { GameSessionProps, LogicQuestion } from '../../types';
 import { Loader2 } from 'lucide-react';
+import { useTranslation } from '../../contexts/LanguageContext';
 
 // 本地随机生成逻辑分类题目
 const generateRandomLogicQuestions = (): LogicQuestion[] => {
@@ -33,6 +34,7 @@ const LogicClassification: React.FC<GameSessionProps> = ({ onComplete }) => {
   const [loading, setLoading] = useState(true);
   const [score, setScore] = useState(0);
   const [feedback, setFeedback] = useState<'correct' | 'wrong' | null>(null);
+  const { t, tObj } = useTranslation();
 
   useEffect(() => {
     // 使用本地随机生成，避免API依赖
@@ -66,7 +68,7 @@ const LogicClassification: React.FC<GameSessionProps> = ({ onComplete }) => {
     return (
       <div className="flex flex-col items-center justify-center h-full">
         <Loader2 className="animate-spin text-indigo-500 mb-4" size={48} />
-        <p className="text-slate-500 font-medium">正在准备逻辑谜题...</p>
+        <p className="text-slate-500 font-medium">{tObj('games.logicClassification.generating')}</p>
       </div>
     );
   }
@@ -76,12 +78,12 @@ const LogicClassification: React.FC<GameSessionProps> = ({ onComplete }) => {
   return (
     <div className="flex flex-col items-center justify-center h-full max-w-xl mx-auto w-full">
       <div className="w-full flex justify-between text-sm font-bold text-slate-400 mb-8 uppercase tracking-wider">
-        <span>问题 {currentIndex + 1} / {questions.length}</span>
-        <span>得分: {score}</span>
+        <span>{tObj('games.logicClassification.question', { current: currentIndex + 1, total: questions.length })}</span>
+        <span>{tObj('games.logicClassification.score', { score })}</span>
       </div>
 
       <div className="bg-white p-10 rounded-3xl shadow-xl shadow-indigo-100 border border-indigo-50 w-full text-center mb-10 transform transition-all hover:scale-[1.01]">
-        <p className="text-xs text-indigo-400 font-bold uppercase tracking-widest mb-4">请为该物品归类</p>
+        <p className="text-xs text-indigo-400 font-bold uppercase tracking-widest mb-4">{tObj('games.logicClassification.classifyItem')}</p>
         <h2 className="text-5xl font-black text-slate-800">{currentQ.item}</h2>
       </div>
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { GameSessionProps } from '../../types';
 import { Carrot, Hammer, Armchair, Smartphone, Bike, Key, Shirt, Apple, Wrench } from 'lucide-react';
+import { useTranslation } from '../../contexts/LanguageContext';
 
 const ICONS = [
   { id: 'carrot', Icon: Carrot, cat: '食物' },
@@ -28,6 +29,7 @@ const SerialMemory: React.FC<GameSessionProps> = ({ onComplete }) => {
   const [timeLeft, setTimeLeft] = useState(3);
   const [score, setScore] = useState(0);
   const [gameFinished, setGameFinished] = useState(false);
+  const { tObj } = useTranslation();
 
   const startLevel = (lvl: number) => {
     const length = Math.min(2 + lvl, ICONS.length); // 确保不超过可用图标数量
@@ -82,12 +84,12 @@ const SerialMemory: React.FC<GameSessionProps> = ({ onComplete }) => {
   return (
     <div className="flex flex-col items-center justify-center h-full max-w-2xl mx-auto p-4 w-full">
       <div className="mb-8 text-center">
-        <h2 className="text-2xl font-bold text-slate-700 mb-2">第 {level} 关</h2>
+        <h2 className="text-2xl font-bold text-slate-700 mb-2">{tObj('games.serialMemory.level', { level })}</h2>
         {stage === STAGES.MEMORIZE && (
-          <p className="text-blue-600 font-bold text-lg animate-pulse">记忆时间: {timeLeft}秒</p>
+          <p className="text-blue-600 font-bold text-lg animate-pulse">{tObj('games.serialMemory.memorizeTime', { time: timeLeft })}</p>
         )}
         {stage === STAGES.RECALL && (
-          <p className="text-slate-500">按原顺序还原物品</p>
+          <p className="text-slate-500">{tObj('games.serialMemory.restoreSequence')}</p>
         )}
       </div>
 
@@ -111,7 +113,7 @@ const SerialMemory: React.FC<GameSessionProps> = ({ onComplete }) => {
                    <item.Icon size={24} className="text-slate-700" />
                  </div>
                ))}
-               {userSequence.length === 0 && <span className="text-slate-400 text-sm font-medium">点击下方物品填充此处</span>}
+               {userSequence.length === 0 && <span className="text-slate-400 text-sm font-medium">{tObj('games.serialMemory.clickToFill')}</span>}
             </div>
 
             <div className="grid grid-cols-3 md:grid-cols-5 gap-3">

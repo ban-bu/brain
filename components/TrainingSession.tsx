@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { GameType, GameMetadata } from '../types';
 import { X, Play, BookOpen, FlaskConical, CheckCircle2 } from 'lucide-react';
+import { useTranslation } from '../contexts/LanguageContext';
 import SchulteTable from './games/SchulteTable';
 import StroopTest from './games/StroopTest';
 import SerialMemory from './games/SerialMemory';
@@ -19,6 +20,7 @@ const TrainingSession: React.FC<TrainingSessionProps> = ({ game, onExit }) => {
   const [isFinished, setIsFinished] = useState(false);
   const [finalScore, setFinalScore] = useState(0);
   const [gameStats, setGameStats] = useState<any>(null);
+  const { t, tObj } = useTranslation();
 
   const handleComplete = (score: number, data?: any) => {
     setFinalScore(score);
@@ -91,7 +93,7 @@ const TrainingSession: React.FC<TrainingSessionProps> = ({ game, onExit }) => {
             {/* Instructions */}
             <section className="bg-white p-5 md:p-8 rounded-2xl md:rounded-3xl shadow-sm border border-slate-100">
               <h3 className="text-lg md:text-xl font-bold text-slate-800 mb-3 md:mb-4 flex items-center gap-2">
-                <CheckCircle2 className="text-blue-500 w-5 h-5 md:w-6 md:h-6" /> 训练指南
+                <CheckCircle2 className="text-blue-500 w-5 h-5 md:w-6 md:h-6" /> {t('trainingGuide')}
               </h3>
               <ul className="space-y-3">
                 {game.howToPlay.map((step, idx) => (
@@ -108,7 +110,7 @@ const TrainingSession: React.FC<TrainingSessionProps> = ({ game, onExit }) => {
             {/* Science */}
             <section className="bg-white p-5 md:p-8 rounded-2xl md:rounded-3xl shadow-sm border border-slate-100">
               <h3 className="text-lg md:text-xl font-bold text-slate-800 mb-3 md:mb-4 flex items-center gap-2">
-                <FlaskConical className="text-purple-500 w-5 h-5 md:w-6 md:h-6" /> 科学原理
+                <FlaskConical className="text-purple-500 w-5 h-5 md:w-6 md:h-6" /> {t('sciencePrinciple')}
               </h3>
               <p className="text-sm md:text-base text-slate-600 leading-relaxed mb-4">
                 {game.science}
@@ -120,11 +122,11 @@ const TrainingSession: React.FC<TrainingSessionProps> = ({ game, onExit }) => {
             </section>
 
             {/* Action */}
-            <button 
+            <button
               onClick={() => setHasStarted(true)}
               className={`w-full py-3.5 md:py-4 rounded-xl font-bold text-lg text-white shadow-lg shadow-blue-500/20 bg-gradient-to-r ${game.color} hover:opacity-90 transition-all transform hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 sticky bottom-0 md:static z-20`}
             >
-              <Play fill="currentColor" size={20} /> 开始训练
+              <Play fill="currentColor" size={20} /> {t('startTraining')}
             </button>
             {/* Spacer for sticky button on mobile */}
             <div className="h-4 md:hidden"></div>
@@ -142,40 +144,40 @@ const TrainingSession: React.FC<TrainingSessionProps> = ({ game, onExit }) => {
           <div className={`w-16 h-16 md:w-20 md:h-20 mx-auto bg-gradient-to-br ${game.color} rounded-full flex items-center justify-center text-white mb-6 shadow-lg`}>
             <game.icon size={32} className="md:w-10 md:h-10" />
           </div>
-          <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mb-2">训练完成!</h2>
-          <p className="text-slate-500 mb-8 text-sm md:text-base">本次训练效果显著，大脑皮层活跃度提升。</p>
-          
+          <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mb-2">{t('trainingCompleted')}</h2>
+          <p className="text-slate-500 mb-8 text-sm md:text-base">{t('trainingEffect')}</p>
+
           <div className="bg-slate-50 rounded-2xl p-6 mb-8">
-            <span className="text-sm text-slate-400 uppercase tracking-wider font-bold">最终得分</span>
+            <span className="text-sm text-slate-400 uppercase tracking-wider font-bold">{t('finalScore')}</span>
             <div className="text-4xl md:text-5xl font-black text-slate-900 mt-2">{finalScore}</div>
           </div>
 
           {/* 斯特鲁普效应详细统计 */}
           {game.id === GameType.STROOP && gameStats && (
             <div className="bg-slate-50 rounded-2xl p-6 mb-8 space-y-4">
-              <h3 className="text-lg font-bold text-slate-800 mb-4">详细统计</h3>
+              <h3 className="text-lg font-bold text-slate-800 mb-4">{t('games.stroop.detailedStats')}</h3>
               <div className="grid grid-cols-2 gap-4">
                 <div className="text-center">
                   <div className="text-2xl font-bold text-green-600">{gameStats.correct}</div>
-                  <div className="text-sm text-slate-500">正确题数</div>
+                  <div className="text-sm text-slate-500">{t('games.stroop.correctCount')}</div>
                 </div>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-red-600">{gameStats.wrong}</div>
-                  <div className="text-sm text-slate-500">错误题数</div>
+                  <div className="text-sm text-slate-500">{t('games.stroop.wrongCount')}</div>
                 </div>
                 <div className="text-center col-span-2">
                   <div className="text-3xl font-bold text-blue-600">{gameStats.accuracy}%</div>
-                  <div className="text-sm text-slate-500">正确率</div>
+                  <div className="text-sm text-slate-500">{t('games.stroop.accuracy')}</div>
                 </div>
               </div>
             </div>
           )}
 
-          <button 
+          <button
             onClick={onExit}
             className="w-full py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition active:scale-95"
           >
-            返回主页
+            {t('returnHome')}
           </button>
         </div>
       </div>

@@ -1,28 +1,30 @@
 import React from 'react';
 import { GameMetadata } from '../types';
-import { GAMES } from '../constants';
+import { getGamesData } from '../constants';
 import { Clock, ArrowRight, Activity } from 'lucide-react';
+import { useTranslation } from '../contexts/LanguageContext';
 
 interface DashboardProps {
   onSelectGame: (game: GameMetadata) => void;
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ onSelectGame }) => {
+  const { t, tObj } = useTranslation();
+  const games = getGamesData(t, tObj);
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-6 md:py-12 pb-20">
       <div className="mb-8 md:mb-12 text-center md:text-left space-y-3 md:space-y-4">
         <h1 className="text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
-          认知潜能训练 <span className="block md:inline text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">CogniTrain</span>
+          {t('brainTrainingGames')} <span className="block md:inline text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">CogniTrain</span>
         </h1>
         <p className="text-slate-500 text-base md:text-xl max-w-3xl leading-relaxed mx-auto md:mx-0">
-          基于神经科学原理设计的综合训练套件。
-          <span className="hidden md:inline"><br/></span>
-          坚持训练可增强神经可塑性、提升专注力与记忆力。
+          {t('selectGameToStart')}
         </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
-        {GAMES.map((game) => (
+        {games.map((game) => (
           <button
             key={game.id}
             onClick={() => onSelectGame(game)}
@@ -65,7 +67,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onSelectGame }) => {
                 </div>
                 
                 <div className="flex items-center text-sm font-bold text-slate-400 group-hover:text-blue-600 transition-colors">
-                  开始训练 <ArrowRight size={16} className="ml-2 transform group-hover:translate-x-1 transition-transform" />
+                  {t('startTraining')} <ArrowRight size={16} className="ml-2 transform group-hover:translate-x-1 transition-transform" />
                 </div>
               </div>
             </div>

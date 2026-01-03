@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { GameSessionProps } from '../../types';
 import { Volume2, Play } from 'lucide-react';
+import { useTranslation } from '../../contexts/LanguageContext';
 
 const AuditoryAttention: React.FC<GameSessionProps> = ({ onComplete }) => {
   const [level, setLevel] = useState(1);
@@ -9,6 +10,7 @@ const AuditoryAttention: React.FC<GameSessionProps> = ({ onComplete }) => {
   const [inputValue, setInputValue] = useState("");
   const [sequence, setSequence] = useState<number[]>([]);
   const [feedback, setFeedback] = useState<string | null>(null);
+  const { t, tObj } = useTranslation();
 
   const generateSequence = (len: number) => {
     return Array.from({ length: len }, () => Math.floor(Math.random() * 10));
@@ -56,14 +58,14 @@ const AuditoryAttention: React.FC<GameSessionProps> = ({ onComplete }) => {
     
     // Exact match check
     if (inputValue === sequence.join('')) {
-      setFeedback("正确!");
+      setFeedback(tObj('games.auditoryAttention.correct'));
       setTimeout(() => {
         setFeedback(null);
         setLevel(l => l + 1);
         setTimeout(() => startLevel(), 500); // Start next level after brief pause
       }, 1000);
     } else {
-      setFeedback(`错误。正确答案是: ${sequence.join(' ')}`);
+      setFeedback(tObj('games.auditoryAttention.wrong', { answer: sequence.join(' ') }));
       setTimeout(() => {
         onComplete(level * 10);
       }, 2500);
@@ -78,14 +80,14 @@ const AuditoryAttention: React.FC<GameSessionProps> = ({ onComplete }) => {
         </div>
         {isPlaying && (
           <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 text-sm text-amber-500 font-bold animate-bounce whitespace-nowrap">
-            正在朗读...
+            {tObj('games.auditoryAttention.playing')}
           </div>
         )}
       </div>
 
       <div className="w-full text-center px-4">
-        <h3 className="text-xl md:text-2xl font-bold text-slate-800 mb-2">第 {level} 关</h3>
-        <p className="text-slate-500 mb-6 md:mb-8 text-sm md:text-base">听数字，然后按顺序输入。</p>
+        <h3 className="text-xl md:text-2xl font-bold text-slate-800 mb-2">{tObj('games.auditoryAttention.level', { level })}</h3>
+        <p className="text-slate-500 mb-6 md:mb-8 text-sm md:text-base">{tObj('games.auditoryAttention.listenNumbers')}</p>
 
         {showInput ? (
           <form onSubmit={handleSubmit} className="w-full">
@@ -97,21 +99,21 @@ const AuditoryAttention: React.FC<GameSessionProps> = ({ onComplete }) => {
               placeholder=""
               autoFocus
             />
-            <button 
+            <button
               type="submit"
               className="w-full bg-slate-900 text-white font-bold py-3 md:py-4 rounded-xl hover:bg-slate-800 transition shadow-lg shadow-slate-200 active:scale-95"
             >
-              提交答案
+              {tObj('games.auditoryAttention.submitAnswer')}
             </button>
           </form>
         ) : (
            <div className="h-16 flex items-center justify-center">
-             {!isPlaying && <button onClick={() => playSequence(sequence)} className="flex items-center gap-2 text-slate-500 hover:text-amber-600 transition font-medium"><Play size={18}/> 重听一遍</button>}
+             {!isPlaying && <button onClick={() => playSequence(sequence)} className="flex items-center gap-2 text-slate-500 hover:text-amber-600 transition font-medium"><Play size={18}/> {tObj('games.auditoryAttention.replay')}</button>}
            </div>
         )}
 
         {feedback && (
-          <div className={`mt-6 font-bold text-lg p-3 rounded-lg ${feedback === "正确!" ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-500'}`}>
+          <div className={`mt-6 font-bold text-lg p-3 rounded-lg ${feedback.includes(tObj('games.auditoryAttention.correct')) ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-500'}`}>
             {feedback}
           </div>
         )}
