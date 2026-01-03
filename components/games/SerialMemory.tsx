@@ -27,6 +27,7 @@ const SerialMemory: React.FC<GameSessionProps> = ({ onComplete }) => {
   const [stage, setStage] = useState(STAGES.MEMORIZE);
   const [timeLeft, setTimeLeft] = useState(3);
   const [score, setScore] = useState(0);
+  const [gameFinished, setGameFinished] = useState(false);
 
   const startLevel = (lvl: number) => {
     const length = 2 + lvl;
@@ -58,7 +59,7 @@ const SerialMemory: React.FC<GameSessionProps> = ({ onComplete }) => {
   const handleSelect = (item: typeof ICONS[0]) => {
     const newSeq = [...userSequence, item];
     setUserSequence(newSeq);
-    
+
     // Check immediate validity to fail fast or complete
     if (newSeq.length === sequence.length) {
       // Check correctness
@@ -68,10 +69,17 @@ const SerialMemory: React.FC<GameSessionProps> = ({ onComplete }) => {
         setLevel(l => l + 1);
         startLevel(level + 1);
       } else {
-        onComplete(score);
+        setGameFinished(true);
       }
     }
   };
+
+  // 当游戏结束时调用 onComplete，传递最终分数
+  useEffect(() => {
+    if (gameFinished) {
+      onComplete(score);
+    }
+  }, [gameFinished, score, onComplete]);
 
   return (
     <div className="flex flex-col items-center justify-center h-full max-w-2xl mx-auto p-4 w-full">

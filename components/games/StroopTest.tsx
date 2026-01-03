@@ -17,6 +17,7 @@ const StroopTest: React.FC<GameSessionProps> = ({ onComplete }) => {
   const [currentWord, setCurrentWord] = useState(COLORS[0]);
   const [currentColor, setCurrentColor] = useState(COLORS[1]);
   const [options, setOptions] = useState<typeof COLORS>([]);
+  const [gameFinished, setGameFinished] = useState(false);
 
   const generateTurn = useCallback(() => {
     const wordIdx = Math.floor(Math.random() * COLORS.length);
@@ -42,7 +43,7 @@ const StroopTest: React.FC<GameSessionProps> = ({ onComplete }) => {
       setTimeLeft(prev => {
         if (prev <= 1) {
           clearInterval(interval);
-          onComplete(score);
+          setGameFinished(true);
           return 0;
         }
         return prev - 1;
@@ -51,6 +52,13 @@ const StroopTest: React.FC<GameSessionProps> = ({ onComplete }) => {
     return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // 当游戏结束时调用 onComplete，传递最终分数
+  useEffect(() => {
+    if (gameFinished) {
+      onComplete(score);
+    }
+  }, [gameFinished, score, onComplete]);
 
   const handleOptionClick = (selectedColorName: string) => {
     if (selectedColorName === currentColor.name) {
