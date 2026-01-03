@@ -1,7 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { GameSessionProps, LogicQuestion } from '../../types';
-import { generateLogicQuestions } from '../../services/geminiService';
 import { Loader2 } from 'lucide-react';
+
+// 本地随机生成逻辑分类题目
+const generateRandomLogicQuestions = (): LogicQuestion[] => {
+  const questionPool: LogicQuestion[] = [
+    { item: "苹果", correctCategory: "水果", options: ["水果", "交通工具", "工具", "家具"] },
+    { item: "锤子", correctCategory: "工具", options: ["动物", "工具", "衣物", "电子产品"] },
+    { item: "沙发", correctCategory: "家具", options: ["家具", "食物", "星球", "运动"] },
+    { item: "老鹰", correctCategory: "动物", options: ["花卉", "动物", "国家", "元素"] },
+    { item: "轿车", correctCategory: "交通工具", options: ["水果", "交通工具", "职业", "天气"] },
+    { item: "玫瑰", correctCategory: "花卉", options: ["花卉", "工具", "国家", "食物"] },
+    { item: "医生", correctCategory: "职业", options: ["动物", "职业", "家具", "元素"] },
+    { item: "氧气", correctCategory: "元素", options: ["水果", "交通工具", "元素", "运动"] },
+    { item: "篮球", correctCategory: "运动", options: ["运动", "衣物", "国家", "工具"] },
+    { item: "中国", correctCategory: "国家", options: ["花卉", "国家", "家具", "电子产品"] },
+    { item: "手机", correctCategory: "电子产品", options: ["电子产品", "食物", "职业", "动物"] },
+    { item: "衬衫", correctCategory: "衣物", options: ["衣物", "交通工具", "星球", "花卉"] },
+    { item: "面包", correctCategory: "食物", options: ["食物", "工具", "国家", "运动"] },
+    { item: "地球", correctCategory: "星球", options: ["星球", "家具", "元素", "职业"] },
+    { item: "雨天", correctCategory: "天气", options: ["天气", "动物", "电子产品", "花卉"] },
+  ];
+
+  // 随机选择5个题目
+  const shuffled = [...questionPool].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, 5);
+};
 
 const LogicClassification: React.FC<GameSessionProps> = ({ onComplete }) => {
   const [questions, setQuestions] = useState<LogicQuestion[]>([]);
@@ -11,12 +35,10 @@ const LogicClassification: React.FC<GameSessionProps> = ({ onComplete }) => {
   const [feedback, setFeedback] = useState<'correct' | 'wrong' | null>(null);
 
   useEffect(() => {
-    const loadContent = async () => {
-      const qs = await generateLogicQuestions();
-      setQuestions(qs);
-      setLoading(false);
-    };
-    loadContent();
+    // 使用本地随机生成，避免API依赖
+    const qs = generateRandomLogicQuestions();
+    setQuestions(qs);
+    setLoading(false);
   }, []);
 
   const handleAnswer = (selected: string) => {
@@ -44,7 +66,7 @@ const LogicClassification: React.FC<GameSessionProps> = ({ onComplete }) => {
     return (
       <div className="flex flex-col items-center justify-center h-full">
         <Loader2 className="animate-spin text-indigo-500 mb-4" size={48} />
-        <p className="text-slate-500 font-medium">AI 正在生成逻辑谜题...</p>
+        <p className="text-slate-500 font-medium">正在准备逻辑谜题...</p>
       </div>
     );
   }

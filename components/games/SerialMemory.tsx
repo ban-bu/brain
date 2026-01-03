@@ -30,11 +30,9 @@ const SerialMemory: React.FC<GameSessionProps> = ({ onComplete }) => {
   const [gameFinished, setGameFinished] = useState(false);
 
   const startLevel = (lvl: number) => {
-    const length = 2 + lvl;
-    const newSeq = [];
-    for (let i = 0; i < length; i++) {
-      newSeq.push(ICONS[Math.floor(Math.random() * ICONS.length)]);
-    }
+    const length = Math.min(2 + lvl, ICONS.length); // 确保不超过可用图标数量
+    const shuffledIcons = [...ICONS].sort(() => Math.random() - 0.5);
+    const newSeq = shuffledIcons.slice(0, length);
     setSequence(newSeq);
     setUserSequence([]);
     setStage(STAGES.MEMORIZE);

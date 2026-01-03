@@ -1,7 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import { GameSessionProps, ContextScenario } from '../../types';
-import { generateContextScenario } from '../../services/geminiService';
 import { Loader2, Lightbulb, PenLine } from 'lucide-react';
+
+// 本地随机生成情景联想题目
+const generateRandomContextScenario = (): ContextScenario => {
+  const itemsPool = [
+    '一把生锈的钥匙', '一个红色的气球', '一只打瞌睡的猫', '一顶破旧的帽子', '一根弯曲的蜡烛',
+    '一个古老的怀表', '一双磨损的皮鞋', '一张泛黄的照片', '一个水晶玻璃杯', '一根羽毛笔',
+    '一枚铜质硬币', '一个木制风车', '一只彩色风筝', '一副破损的眼镜', '一根竹制鱼竿',
+    '一个陶瓷茶壶', '一串珍珠项链', '一本发黄的日记', '一个银质烛台', '一只木头玩具熊',
+    '一顶牛仔帽', '一个玻璃瓶子', '一根登山杖', '一个皮革钱包', '一只蝴蝶标本',
+    '一个黄铜门把手', '一根彩色铅笔', '一个藤编篮子', '一只帆船模型', '一个古董相机'
+  ];
+
+  const themes = [
+    '冒险故事', '悬疑故事', '奇幻故事', '科幻故事', '历史故事', '爱情故事',
+    '侦探故事', '魔法故事', '时空旅行', '宝藏寻觅', '神秘事件', '未来世界'
+  ];
+
+  // 随机选择3个不同的物品
+  const shuffledItems = [...itemsPool].sort(() => Math.random() - 0.5);
+  const selectedItems = shuffledItems.slice(0, 3);
+
+  // 随机选择一个主题
+  const selectedTheme = themes[Math.floor(Math.random() * themes.length)];
+
+  return {
+    items: selectedItems,
+    theme: selectedTheme
+  };
+};
 
 const ContextAssociation: React.FC<GameSessionProps> = ({ onComplete }) => {
   const [scenario, setScenario] = useState<ContextScenario | null>(null);
@@ -10,12 +38,10 @@ const ContextAssociation: React.FC<GameSessionProps> = ({ onComplete }) => {
   const [finished, setFinished] = useState(false);
 
   useEffect(() => {
-    const loadContent = async () => {
-      const data = await generateContextScenario();
-      setScenario(data);
-      setLoading(false);
-    };
-    loadContent();
+    // 使用本地随机生成，避免API依赖
+    const data = generateRandomContextScenario();
+    setScenario(data);
+    setLoading(false);
   }, []);
 
   if (loading || !scenario) {
