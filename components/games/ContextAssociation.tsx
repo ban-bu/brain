@@ -61,9 +61,9 @@ const ContextAssociation: React.FC<GameSessionProps> = ({ onComplete }) => {
         <div className="bg-green-100 p-8 rounded-full mb-8 text-green-600 shadow-lg shadow-green-100">
            <Lightbulb size={64} />
         </div>
-        <h2 className="text-3xl font-bold text-slate-800 mb-4">{tObj('games.contextMemory.howToPlay')[2]}</h2>
+        <h2 className="text-3xl font-bold text-slate-800 mb-4">{tObj('games.contextMemory.howToPlay[2]')}</h2>
         <p className="text-slate-600 mb-10 leading-relaxed">
-          {tObj('games.contextMemory.howToPlay')[1]} <strong>{scenario.items.join('、')}</strong> {tObj('games.contextMemory.howToPlay')[0]}
+          {tObj('games.contextMemory.howToPlay[1]')} <strong>{scenario.items.join('、')}</strong> {tObj('games.contextMemory.howToPlay[0]')}
         </p>
         <button
           onClick={() => onComplete(100)}
@@ -85,7 +85,7 @@ const ContextAssociation: React.FC<GameSessionProps> = ({ onComplete }) => {
           {tObj('games.contextMemory.createStory')}
         </h2>
         <p className="text-slate-500 text-lg">
-          {tObj('games.contextMemory.howToPlay')[3]}
+          {tObj('games.contextMemory.howToPlay[3]')}
         </p>
       </div>
 

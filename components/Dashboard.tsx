@@ -1,6 +1,6 @@
 import React from 'react';
 import { GameMetadata } from '../types';
-import { getGamesData } from '../constants';
+import { GAMES } from '../constants';
 import { Clock, ArrowRight, Activity } from 'lucide-react';
 import { useTranslation } from '../contexts/LanguageContext';
 
@@ -9,8 +9,7 @@ interface DashboardProps {
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ onSelectGame }) => {
-  const { t, tObj } = useTranslation();
-  const games = getGamesData(t, tObj);
+  const { t } = useTranslation();
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6 md:py-12 pb-20">
@@ -24,7 +23,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onSelectGame }) => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
-        {games.map((game) => (
+        {GAMES.map((game) => (
           <button
             key={game.id}
             onClick={() => onSelectGame(game)}

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { GameSessionProps } from '../../types';
-import { useTranslation } from '../../contexts/LanguageContext';
 
 const COLORS = [
   { name: '红', hex: '#ef4444' },
@@ -21,7 +20,6 @@ const StroopTest: React.FC<GameSessionProps> = ({ onComplete }) => {
   const [gameFinished, setGameFinished] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
   const [wrongCount, setWrongCount] = useState(0);
-  const { t } = useTranslation();
 
   const generateTurn = useCallback(() => {
     const wordIdx = Math.floor(Math.random() * COLORS.length);
@@ -86,7 +84,7 @@ const StroopTest: React.FC<GameSessionProps> = ({ onComplete }) => {
     <div className="flex flex-col items-center justify-center h-full max-w-lg mx-auto w-full">
       <div className="w-full flex justify-between mb-8 px-4">
         <div className="text-lg md:text-xl font-bold text-slate-700 bg-white px-4 py-2 rounded-xl shadow-sm">
-          {t('score')}: {score}
+          分数: {score}
         </div>
         <div className={`text-lg md:text-xl font-bold font-mono bg-white px-4 py-2 rounded-xl shadow-sm ${timeLeft < 10 ? 'text-red-500' : 'text-slate-600'}`}>
           00:{timeLeft.toString().padStart(2, '0')}
@@ -96,7 +94,7 @@ const StroopTest: React.FC<GameSessionProps> = ({ onComplete }) => {
       <div className="flex-1 flex flex-col items-center justify-center w-full">
         <div className="text-center mb-12 md:mb-16 relative">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 md:w-48 md:h-48 bg-white rounded-full shadow-2xl shadow-slate-200 z-0"></div>
-          <p className="relative z-10 text-slate-400 mb-4 text-xs md:text-sm font-medium">{t('games.stroop.chooseColor')}</p>
+          <p className="relative z-10 text-slate-400 mb-4 text-xs md:text-sm font-medium">选择这个字的<span className="text-slate-800 font-bold">颜色</span></p>
           <div 
             className="relative z-10 text-7xl md:text-9xl font-black transition-colors duration-200"
             style={{ color: currentColor.hex }}
